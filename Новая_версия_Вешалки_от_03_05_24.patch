@@ -1,0 +1,108 @@
+Subject: [PATCH] Новая версия Вешалки от 03.05.24
+---
+Index: src/Hangman.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Hangman.java b/src/Hangman.java
+--- a/src/Hangman.java	(revision 2aeb012ceb9722aab8086c806588836540bf822e)
++++ b/src/Hangman.java	(date 1714725056998)
+@@ -11,24 +11,22 @@
+ /**
+  * @author El Baron 10.02.2024
+  */
+-/*
+-Поменял на маленькие буквы (?)
+-Убрал глобальные переменные класса
+-Чуть поменял подход к проверке и замене символов, сделал их более прозрачными
+-Сделал чтобы счётчик считал не 5 - 0, а с 6 - 1, так более логично мне кажется
+-Добавил вариант "уже было"
++//Todo Переделать функционал с массивов на коллекции
++//Todo Реализовать проверку символов на повторный ввод (тех которых нет в искомом слове)
++//Todo Реализовать функционал работы не через массивы а через коллекции
++
+ 
+-Заметки от 17 февраля 2024
+-Добавил через так её курву мать визуализацию вешалки, вроде работает.
+-Нужно добавить функционал запоминания УЖЕ НАЗВАННЫХ И НЕВЕРНЫХ БУКВ, а не только названных-верных
+-что бы в ОБОИХ случаях система говорила уже было, а не как сейчас - если буква есть то говорит уже было
+-Но для этого надо создавать видимо какой то пул названных букв и проверять их, складывая туда всё
+-и верные и неверные...Но хер знает надо это или нет. Читать ТЗ ?
+- */
++
++
+ public class Hangman {
+ 
+     static int tryCounter = 6;
+ 
++    /**
++     * Основная логика игры, в которой вызываются и работают все нужные методы.
++     * Я буду писать подробные комментарии в первую очередь для себя, не взыщите кто читает - я учусь
++     * Обновление от 3 мая 2024
++     */
+     public static void main(String[] args) {
+         System.out.println("Добро пожаловать в игру Виселица версии 1.0\n" +
+                 "Вам нужно угадать слово с шести попыток.\n" +
+@@ -36,23 +34,35 @@
+                 "даже если их несколько одинаковых.\n" +
+                 "Если вы не угадали с шести попыток, игра окончена.\n");
+ 
+-        Scanner gameChoose = new Scanner(System.in);
+-        while (true) {
+-            System.out.println("Желаете начать новую игру (д) или выйти ?(н)");
+-            String gamerInput = gameChoose.nextLine();
+-            if (gamerInput.contains("д")) {
+-                tryCounter = 6;
+-                gameLoop();
+-            } else if (gamerInput.contains("н")) {
+-                System.out.println("Выход из игры");
+-                return;
+-            } else {
+-                System.out.println("Введена неверная команда, попробуйте ещё раз");
+-            }
+-        }
++        Scanner gameChoose = new Scanner(System.in);//Создание объекта класса Сканнер
++        String gamerInput;
++        do {
++            tryCounter = 6;
++            gameLoop();
++            System.out.println("Желаете начать новую игру(д) или выйти(н) ? ");
++            gamerInput = gameChoose.nextLine();
++
++        } while (gamerInput.contains("д"));// От 37 по 43 строки цикл Do-While, это одно целое
++
++//        while (true) {
++//            System.out.println("Новая игра (д) или выход ?(н)");
++//            String gamerInput = gameChoose.nextLine();
++//            if (gamerInput.contains("д")) {
++//                tryCounter = 6;
++//                gameLoop();
++//            } else if (gamerInput.contains("н")) {
++//                System.out.println("Выход из игры");
++//                return;
++//            } else {
++//                System.out.println("Введена неверная команда, попробуйте ещё раз");
++//            }
++//        }
+ 
+     }
+ 
++    /**
++     * Метод gameLoop основной метод игры.
++     */
+     public static void gameLoop() {
+ 
+         String word = getRandomWord(getAllWords());
+@@ -91,6 +101,11 @@
+ 
+     }
+ 
++    /**
++     * Метод getHiddenWord
++     * @param word
++     *
++     */
+     public static String getHiddenWord(String word) {
+         String result = "*".repeat(word.length());
+         return result;
