@@ -60,7 +60,7 @@ public class Hangman {
     }
 
     /**
-     * Метод gameLoop основной метод игры.
+     * Основной метод игры.
      */
     public static void gameLoop() {
 
